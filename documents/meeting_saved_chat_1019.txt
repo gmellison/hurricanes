@@ -1,0 +1,8 @@
+12:43:32	 From greg ellison : https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-nov2019.pdf
+12:43:38	 From greg ellison : https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2019-052520.txt
+12:44:33	 From greg ellison : https://www.wpc.ncep.noaa.gov/tropical/rain/tcmaxima.html
+12:45:42	 From greg ellison : https://www.nhc.noaa.gov/marine/rainfall/
+12:48:28	 From beibei Xu : http://tcdata.typhoon.org.cn/PRITCdata/PRITC_V1.0.txt
+12:50:16	 From beibei Xu : http://tcdata.typhoon.org.cn/qzfxzs_sm.html
+12:53:35	 From greg ellison : https://www.aoml.noaa.gov/hrd/hurdat/Data_Storm.html
+12:58:42	 From Lynne Seymour : https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn
