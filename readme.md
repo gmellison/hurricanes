@@ -4,15 +4,19 @@
 I'll do my best to keep things organized!
 
 ```
-|readme.md
+project root
+| readme.md
+|
 |-- documents -> general notes and text documents will be stored here
 |  | links.txt
+|
 |-- meeting-notes
-|  |1019_meeting_notes.txt -> links to data discussed in Monday's meeting
+|  | 1019_meeting_notes.txt -> links to data discussed in Monday's meeting
+|
 ```
 
 
-### Notes on Git:
+### Notes on getting started with Git:
 You'll want to insall git and make a github account (if you want to modify the repository directly)
 Install git here: https://git-scm.com/downloads
 
