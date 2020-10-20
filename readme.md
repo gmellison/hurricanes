@@ -31,7 +31,7 @@ to update from remote:
 `git pull`
 
 to add a file, and send to remote:
-`git add (filename)`
+`git add filename`
 `git commit -m "commit message describing changes"` 
 `git push`
 
