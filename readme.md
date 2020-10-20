@@ -24,7 +24,7 @@ Once git is installed, you can clone the repo with
 `git clone https://github.com/gmellison/hurricanes`
 
 (If you don't want type your password every time follow the ssh instructions here: 
-
+https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh)
 The only commands you really need are: 
 
 to update from remote:
