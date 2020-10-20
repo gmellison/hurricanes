@@ -4,8 +4,10 @@
 I'll do my best to keep things organized!
 
 --documents -> general notes and text documents will be stored here
+
 --meeting-notes
   --1019\_meeting\_notes.txt -> links to data discussed 
+
 
 # Notes on Git:
 You'll want to insall git and make a github account (if you want to modify the repository directly)
