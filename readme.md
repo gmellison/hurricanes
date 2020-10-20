@@ -17,7 +17,7 @@ project root
 
 
 ### Notes on getting started with Git:
-You'll want to insall git and make a github account (if you want to modify the repository directly)
+You'll want to install git and make a github account (if you want to modify the repository directly)
 Install git here: https://git-scm.com/downloads
 
 Once git is installed, you can clone the repo with
