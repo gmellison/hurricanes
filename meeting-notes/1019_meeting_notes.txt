@@ -1,0 +1,17 @@
+Some Hurdat2 informational links: https://www.aoml.noaa.gov/hrd/hurdat/Data_Storm.html
+Hurdat 2 Information:             https://www.nhc.noaa.gov/data/hurdat/hurdat2-format-nov2019.pdf
+Hurdat 2 (atlantic) data:         https://www.nhc.noaa.gov/data/hurdat/hurdat2-1851-2019-052520.txt
+Maximum rainfall point estimates: https://www.wpc.ncep.noaa.gov/tropical/rain/tcmaxima.html
+NHC rainfall splash page:         https://www.nhc.noaa.gov/marine/rainfall/
+	A couple possible radar-based rainfall estimates:
+		QMORPH:    http://www.cpc.ncep.noaa.gov/products/janowiak/cmorph_description.html
+		eTRaP:     http://www.ssd.noaa.gov/PS/TROP/etrap.html
+		NRL-Blend  http://www.nrlmry.navy.mil/sat-bin/rain.cgi
+Index data:
+http://tcdata.typhoon.org.cn/PRITCdata/PRITC_V1.0.txt
+http://tcdata.typhoon.org.cn/qzfxzs_sm.html
+
+Global Historical Climatology Network: 
+                                  https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn
+
+
