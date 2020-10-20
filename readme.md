@@ -1,15 +1,18 @@
-## Hurricane Category Project
+# Hurricane Category Project
 
-# Project Structure
+### Project Structure
 I'll do my best to keep things organized!
 
---documents -> general notes and text documents will be stored here
+```
+|readme.md
+|-- documents -> general notes and text documents will be stored here
+|  | links.txt
+|-- meeting-notes
+|  |1019_meeting_notes.txt -> links to data discussed in Monday's meeting
+```
 
---meeting-notes
-  --1019\_meeting\_notes.txt -> links to data discussed 
 
-
-# Notes on Git:
+### Notes on Git:
 You'll want to insall git and make a github account (if you want to modify the repository directly)
 Install git here: https://git-scm.com/downloads
 
