@@ -1,0 +1,17 @@
+Storm Surge Links:
+  http://surge.srcc.lsu.edu/
+ ^Storm Surge
+  http://surge.srcc.lsu.edu/files/globalpeaksurgedb.csv
+ ^Global Storm Surge Data
+  http://surge.srcc.lsu.edu/ ^Storm Surge http://surge.srcc.lsu.edu/files/globalpeaksurgedb.csv ^Global Storm Surge Data
+Storm surge hazard map:
+  https://noaa.maps.arcgis.com/apps/MapSeries/index.html?appid=d9ed7904dbec441a9c4dd7b277935fad&entry=1
+
+US Rainfall Data:
+  https://www1.ncdc.noaa.gov/pub/data/cdo/documentation/PRECIP_HLY_documentation.pdf
+  https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C00313/html
+
+Typhoon data from China and Japan:
+  http://tcdata.typhoon.org.cn/rdqxfy_zl.html
+  http://agora.ex.nii.ac.jp/digital-typhoon/
+  http://agora.ex.nii.ac.jp/digital-typhoon/disaster/landfall-full/
