@@ -1,0 +1,24 @@
+Updates: 
+  Derek: 
+    Uploaded storm surge (csv) data
+    data from LSU, geography dept (SCIPP)
+    Derek's cousin flies F16s for the navy
+    http://www.southernclimate.org/pages/data-tools
+
+  Greg:
+    Working on CMORPH precipitation data (since 2002)
+    Added HURDAT2 nicely formatted 
+      TODO: 1. add readme , 2. daily aggregates
+
+
+  Hyunseok:
+    looking for Japanese data
+    found from 2001-present
+    will translate into english
+
+Data Issues:
+  1. Variable time ranges -- daily summaries are sufficient
+  2. different schemas in data from different sources
+ 
+  Maintain raw data, add summary for daily(?) aggregations
+
