@@ -100,9 +100,9 @@ for (cmorph_file in list.files("data/cmorph/")) {
   h_name <- stringr::str_split_fixed(cmorph_file, "[_.]", n = 4)[2]
   h_id <- stringr::str_split_fixed(cmorph_file, "[_.]", n = 4)[3]
   
-  if (file.exists(sprintf("data/cmorph/rainfall_%s", h_id))) {
-    next
-  }
+  #if (file.exists(sprintf("data/cmorph/rainfall_%s", h_id))) {
+  #  next
+  #}
   
   cmorph_data$degree_east_c <- round(cmorph_data$degree_east, 1)
   cmorph_data$degree_north_c <- round(cmorph_data$degree_north, 1)
@@ -130,10 +130,14 @@ for (cmorph_file in list.files("data/cmorph/")) {
   
   joined <- left_join(cmorph_data, hurdat_locs, on=c(h_name, h_id, datetime)) 
   joined$radius <- ifelse(joined$radius <= 10, 10, joined$radius)
-  joined$in_storm  = with(joined, (degree_west_c >= degrees_west - (0.1) * (1/5) * radius) &
-                      (degree_west_c <= degrees_west + (0.1) * (1/5) * radius) &
-                      (degree_north_c >= degrees_north - (0.1) * (1/5) *radius) &
-                      (degree_north_c <= degrees_north + (0.1) * (1/5)*radius))
+  # joined$in_storm  = with(joined, (degree_west_c >= degrees_west - (0.1) * (1/5) * radius) &
+  #                    (degree_west_c <= degrees_west + (0.1) * (1/5) * radius) &
+  #                    (degree_north_c >= degrees_north - (0.1) * (1/5) *radius) &
+  #                    (degree_north_c <= degrees_north + (0.1) * (1/5)*radius))
+  joined$in_storm  = with(joined, (degree_west_c >= degrees_west - (0.1) * (1/5) * 20) &
+                     (degree_west_c <= degrees_west + (0.1) * (1/5) * 20) &
+                     (degree_north_c >= degrees_north - (0.1) * (1/5) * 20) &
+                     (degree_north_c <= degrees_north + (0.1) * (1/5) * 20)) ## some radii are huge -- for now just use ~20 nautical miles for all
   
   h_with_cmorph_rain <- joined %>% 
     filter(in_storm) %>% 
@@ -149,7 +153,7 @@ hurdat_with_rainfall <- lapply(unique(hurdat$h_id), function(idx) {
   
   if (!file.exists(filename)) return(NULL)
   rainfall <- read.csv(filename, header=TRUE, stringsAsFactors = FALSE)
-  rainfall$datetime <- as.Date(rainfall$datetime)
+  rainfall$datetime <- ymd_hms(rainfall$datetime)
     
   hurdat_joined_rainfall <- hurdat %>%
     filter(h_id == idx) %>% 
@@ -188,8 +192,13 @@ hurdat_daily <- hurdat_daily %>%
             wind_50_sw = max(wind_50_sw), wind_50_nw = max(wind_50_nw),
             wind_64_ne = max(wind_64_ne), wind_64_se = max(wind_64_ne),
             wind_64_sw = max(wind_64_ne), wind_64_nw = max(wind_64_nw),
-            rainfall = sum(rainfall))
+            rainfall = sum(ifelse(rainfall < 0, 0, rainfall), na.rm=TRUE))
 write.csv(hurdat_daily, "data/hurdat2/hurdat_with_precip_daily.csv")
+
+
+
+
+
 
 #http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.CMORPH/.3-hourly/.mean/.morphed/.cmorph/X/(32.3W)/(48.5W)/RANGEEDGES/T/(0000-0300 18 Jul 2006)/(2100-2400 22 Jul 2006)/RANGEEDGES/Y/(-73.7N)/(-56.5N)/RANGEEDGES/gridtable.tsv
 #http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.CMORPH/.3-hourly/.mean/.morphed/.cmorph/X/(18)/(Jul)/RANGEEDGES/T/(0000-0300 :g:g2006 32.3Wv 48.5W)/(2100-2400 22 Jul 2006)/RANGEEDGES/Y/(-73.7N)/(-56.5N)/RANGEEDGES/gridtable.tsv

@@ -1,0 +1,77 @@
+---
+title: "hurdat_with_precip_schema"
+author: "greg ellison"
+date: "11/2/2020"
+output: html_document
+---
+
+# Overview
+
+this document is a description of the data available in the 'data/hurdat2/hurdat_with_precip.csv' and 'hurdat_with_precip_daily.csv' files.
+
+The data consist of the hurdat2 dataset augmented with cmorph radar precipitation estmates.
+The hurdat2 dataset can be found here: https://www.aoml.noaa.gov/hrd/hurdat/Data_Storm.html
+And the cmorph data can be found here: http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.CMORPH/.3-hourly/.dataset_documentation.html
+
+The hurdat data is cleaned with the clean_hurdat.R script, and code to query, save, and join the cmorph data to hurdat is in the get_cmorph.R script.
+
+## Schema
+There are two files: data/hurdat2/hurdat_with_precip.csv & hurdat_with_precip_daily.csv.
+
+The schema is mostly the same for both, but the daily dataset aggregates the numeric fields as MIN() for pressure, SUM() for rainfall, and MAX() for all others. The daily dataset also drops the id and status fields.
+
+### h_name
+Name of tropical storm
+
+### h_id
+Storm identifier as in Hurdat2 data; "AL" + index of storm in year +  year e.g. "AL012001" for the 1st storm of 2001
+
+### datetime
+Date and time -- Hurdat2 uses 6 hour increments
+
+### lat, lon 
+Latitude and Longitude of center of storm
+
+### radius
+Calculated from the wind quadrant fields. Calculated as MAX of wind_34 columns. Units are nautical miles
+
+### status 
+– Status of system. Options are: TD
+– Tropical cyclone of tropical depression intensity (< 34 knots)
+TS – Tropical cyclone of tropical storm intensity (34-63 knots)
+HU – Tropical cyclone of hurricane intensity (> 64 knots)
+EX – Extratropical cyclone (of any intensity)
+SD – Subtropical cyclone of subtropical depression intensity (< 34 knots)
+SS – Subtropical cyclone of subtropical storm intensity (> 34 knots)
+LO – A low that is neither a tropical cyclone, a subtropical cyclone, nor an extratropical cyclone (of any intensity)
+WV – Tropical Wave (of any intensity)
+DB – Disturbance (of any intensity) 
+
+### id 
+ Record identifier (see notes below)
+C – Closest approach to a coast, not followed by a landfall G
+– Genesis
+I – An intensity peak in terms of both pressure and wind
+L – Landfall (center of system crossing a coastline)
+P – Minimum in central pressure
+R – Provides additional detail on the intensity of the cyclone when rapid changes are underway
+S – Change of status of the system
+T – Provides additional detail on the track (position) of the cyclone W – Maximum sustained wind speed
+
+### windspeed_max 
+Maximum sustained windspeed (in knots)
+
+### pressure_min
+Minimum Pressure (in millibars) 
+
+### wind_34_ne, wind_34_se, wind_34_sw, wind_34_nw
+34 kt wind radii maximum extent in ne/se/sw/nw quadrant (in nautical miles) 
+
+### wind_50_ne, wind_50_se, wind_50_sw, wind_50_nw
+50 kt wind radii maximum extent in ne/se/sw/nw quadrant (in nautical miles) 
+
+### wind_64_ne, wind_64_se,wind_64_sw, wind_64_nw
+64 kt wind radii maximum extent in ne/se/sw/nw quadrant (in nautical miles) 
+
+### rainfall
+estimated total rainfall (in mm) in approximate 20 nautical mile radius of center of storm. estimated from joined cmorph radar data
