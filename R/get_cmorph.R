@@ -195,8 +195,19 @@ hurdat_daily <- hurdat_daily %>%
             rainfall = sum(ifelse(rainfall < 0, 0, rainfall), na.rm=TRUE))
 write.csv(hurdat_daily, "data/hurdat2/hurdat_with_precip_daily.csv")
 
-
-
+hurdat_landfall <- hurdat_all %>% 
+  filter(id == "L") %>% 
+  group_by(h_name, h_id, datetime) %>% 
+  summarise(datetime = min(datetime), lat = min(lat), lon = min(lon), radius = max(radius), windspeed_max = max(windspeed_max),
+            pressure_min = min(pressure_min), 
+            wind_34_ne = max(wind_34_ne), wind_34_se = max(wind_34_se),
+            wind_34_sw = max(wind_34_sw), wind_34_sw = max(wind_34_nw), 
+            wind_50_ne = max(wind_50_ne), wind_50_se = max(wind_50_ne), 
+            wind_50_sw = max(wind_50_sw), wind_50_nw = max(wind_50_nw),
+            wind_64_ne = max(wind_64_ne), wind_64_se = max(wind_64_ne),
+            wind_64_sw = max(wind_64_ne), wind_64_nw = max(wind_64_nw),
+            rainfall = sum(ifelse(rainfall < 0, 0, rainfall), na.rm=TRUE))
+write.csv(hurdat_landfall, "data/hurdat2/hurdat_landfalls.csv")
 
 
 
