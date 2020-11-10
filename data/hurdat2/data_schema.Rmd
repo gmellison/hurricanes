@@ -15,6 +15,11 @@ And the cmorph data can be found here: http://iridl.ldeo.columbia.edu/SOURCES/.N
 
 The hurdat data is cleaned with the clean_hurdat.R script, and code to query, save, and join the cmorph data to hurdat is in the get_cmorph.R script.
 
+Additionally, the Hurdat data have been augmented with rainfall point maxima from here:
+https://www.wpc.ncep.noaa.gov/tropical/rain/tcmaxima.html.
+
+The most relevant dataset is the hurdat2_landfall_with_point_maxima.csv, which is limited to days where the storm makes landfall, and includes the point maxima data.
+
 ## Schema
 There are two files: data/hurdat2/hurdat_with_precip.csv & hurdat_with_precip_daily.csv.
 

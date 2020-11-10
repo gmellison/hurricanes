@@ -66,3 +66,8 @@ joined <- joined %>%
 joined %>% 
   group_by(date, time, lat, lon) %>% 
   summarize(pr = sum(mm.hr))
+
+
+##
+## http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.CMORPH/.3-hourly/.mean/.morphed/.cmorph/X/(2.1W)/(61.7W)/RANGEEDGES/T/(0000-0300%2019%20Nov%202019)/(2100-2400%2019%20Nov%202019)/RANGEEDGES/Y/(19.3N)/(52.2N)/RANGEEDGES/gridtable.tsv
+## http://iridl.ldeo.columbia.edu/SOURCES/.NOAA/.NCEP/.CPC/.CMORPH/.3-hourly/.mean/.morphed/.cmorph/X/(2.1W)/(61.7W)/RANGEEDGES/T/(0000-0300%2020%20Nov%202019)/(2100-2400%2020%20Nov%202019)/RANGEEDGES/Y/(19.3N)/(52.2N)/RANGEEDGES/gridtable.tsv
