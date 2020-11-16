@@ -50,19 +50,27 @@ write.csv(hurdat, "data/hurdat2/hurdat2_join.csv")
 # the lat/lon mins and maxes are based on using a constant approx 20 nautical mile radius
 query_prep <- hurdat %>% 
   group_by(h_name, h_id, datetime) %>% 
-  summarise(lat_min = degree_north - (0.1) * (1/5) * min(radius_s, 5),
-            lat_max = degree_north + (0.1) * (1/5) * min(radius_n, 5),
-            lon_min = degree_east - (0.1) * (1/5) * min(radius_w, 5),    ## switch "max"/"min" longitudes, since we want them read west to east
-            lon_max = degree_east + (0.1) * (1/5) * min(radius_e, 5),
+  summarise(lat_min = degree_north - (0.1) * (1/5) * 5 , # min(radius_s, 5),
+            lat_max = degree_north + (0.1) * (1/5) * 5, # min(radius_n, 5),
+            lon_min = degree_east - (0.1) * (1/5) * 5, # min(radius_w, 5),    ## switch "max"/"min" longitudes, since we want them read west to east
+            lon_max = degree_east + (0.1) * (1/5) * 5, # min(radius_e, 5),
             time_q_start = datetime - hours((hour(datetime) %% 3)) - hours(12),
             time_q_end = datetime - hours((hour(datetime) %% 3)) + hours(12)) %>% 
   arrange(time_q_start)
 
 # convert lat lon back to the format the cmorph query wants:
-query_prep$lat_min_q <- sprintf("%s%s", query_prep$lat_min -  0.125, "N")
-query_prep$lat_max_q <- sprintf("%s%s", query_prep$lat_max + 0.125, "N")
-query_prep$lon_min_q <- sprintf("%s%s", query_prep$lon_min - 0.125, "E")
-query_prep$lon_max_q <- sprintf("%s%s", query_prep$lon_max + 0.125, "E")
+query_prep$lat_min_q <- sprintf("%s%s", 
+                                ifelse(query_prep$lat_min == query_prep$lat_max, query_prep$lat_min - 0.125, query_prep$lat_min), 
+                                       "N")
+query_prep$lat_max_q <- sprintf("%s%s", 
+                                ifelse(query_prep$lat_min == query_prep$lat_max, query_prep$lat_max + 0.125, query_prep$lat_max), 
+                                "N")
+query_prep$lon_min_q <- sprintf("%s%s", 
+                                ifelse(query_prep$lon_min == query_prep$lon_max, query_prep$lon_min - 0.125, query_prep$lon_min),
+                                "E")
+query_prep$lon_max_q <- sprintf("%s%s",
+                               ifelse(query_prep$lon_min == query_prep$lon_max, query_prep$lon_max + 0.125, query_prep$lon_max),
+                                "E")
 
 
 ##
@@ -87,7 +95,7 @@ queries <- query_df$query
 for (i in 1:length(queries)) {
   # one query/file per landfall row.
   # filename will contain storm name, id, and landfall datetime.
-  file_name <- sprintf("data/cmorph_landfalls/cmorph_%s_%s_%s.txt", 
+  file_name <- sprintf("data/cmorph_landfalls2/cmorph_%s_%s_%s.txt", 
                        query_df$h_name[i],
                        query_df$h_id[i], 
                        str_replace_all(query_df$datetime[i], "[-_: ]", ""))
@@ -108,7 +116,7 @@ for (i in 1:length(queries)) {
   }
   
   # be nice to their server
-  sleepy_time <- runif(1, 4, 9)
+  sleepy_time <- runif(1, 2, 4)
   print(sprintf("sleeping for %s seconds, zzzz", sleepy_time))
   Sys.sleep(sleepy_time)
 }

@@ -3,8 +3,8 @@ library(lubridate)
 library(stringr)
 
 ## now loop through the downloads and join the rainfall data to hurdat
-precip_df <- bind_rows(lapply(list.files("data/cmorph_landfalls/"), function(cmorph_file) {
-  cmorph_data <- read.delim(sprintf("data/cmorph_landfalls/%s", cmorph_file), 
+precip_df <- bind_rows(lapply(list.files("data/cmorph_landfalls2/"), function(cmorph_file) {
+  cmorph_data <- read.delim(sprintf("data/cmorph_landfalls2/%s", cmorph_file), 
                           header = TRUE, skip=1, stringsAsFactors = FALSE)
   
   h_name <- str_split_fixed(cmorph_file, "[_]", n = 4)[2]
@@ -15,6 +15,7 @@ precip_df <- bind_rows(lapply(list.files("data/cmorph_landfalls/"), function(cmo
            landfall_date_string, 
            sprintf("%s000000",landfall_date_string)))
 
+  
   rainfall <- sum(cmorph_data$mm.hr) * 3
   
   df <- data.frame(h_name=h_name,h_id=h_id,datetime=landfall_date,precip=rainfall)
