@@ -14,7 +14,7 @@ library(lubridate)
 library(maps)
 library(maptools)
 
-storm_data <- read.csv("../data/AllData.csv", stringsAsFactors = FALSE)
+storm_data <- read.csv("../data/AllData2.csv", stringsAsFactors = FALSE)
 summary(storm_data)
 head(storm_data)
 
@@ -31,22 +31,22 @@ print(sm)
 ```{r}
 # pressure, wind, rainfall, surge by year:
 rain_series <- ggplot(storm_data) + 
-  geom_point(aes(x=mdy(Time), y=Rainfall))
+  geom_point(aes(x=ymd(Time), y=Rainfall))
 ggsave("../plots/eda/rain_by_year.png", rain_series, scale=0.5) 
 print(rain_series)
  
 wind_series <- ggplot(storm_data) + 
-  geom_point(aes(x=mdy(Time), y=MaxWindSpeed))
+  geom_point(aes(x=ymd(Time), y=MaxWindSpeed))
 ggsave("../plots/eda/wind_by_year.png", wind_series, scale=0.5) 
 print(wind_series)
 
 pressure_series <- ggplot(storm_data) + 
-  geom_point(aes(x=mdy(Time), y=CentPressure)) 
+  geom_point(aes(x=ymd(Time), y=CentPressure)) 
 ggsave("../plots/eda/pressure_by_year.png", pressure_series, scale=0.5) 
 print(pressure_series)
 
 surge_series <- ggplot(storm_data) + 
-  geom_point(aes(x=mdy(Time), y=Surge))
+  geom_point(aes(x=ymd(Time), y=Surge))
 ggsave("../plots/eda/surge_by_year.png", surge_series, scale=0.5) 
 print(surge_series)
 
