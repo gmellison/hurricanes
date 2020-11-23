@@ -16,6 +16,7 @@ point_maxima <- lapply(1:nrow(df), function(i) {
   name <- row$Name
   # Name contains both storm name and dates, extract them both:
   h_name <- str_to_lower(str_split_fixed(name, " ", 3)[1])
+  h_name <- str_replace_all(h_name, "\n", "")
   
   h_date <- str_split_fixed(name, "[()]", 4)[2]
   h_month <- str_split_fixed(h_date, " ", 2)[1]
@@ -36,30 +37,42 @@ point_maxima <- lapply(1:nrow(df), function(i) {
 
 write.csv(joined, "data/rainfall_point_maxima.csv")
 
-# get hurdat, and add an index for sequential landfalls
-hurdat <- read.csv("data/hurdat2/hurdat_with_precip.csv", stringsAsFactors = FALSE)
-hurdat <- hurdat %>% 
-  arrange(h_name, datetime) %>% 
-  group_by(h_name, h_id) %>% 
-  mutate(lf_idx = row_number(),
-         year = year(datetime),
-         name_lower = str_to_lower(h_name))
+#### Want to add the point maxima for storms between 1980 and 2002ish
+
+point_maxima <- point_maxima[as.numeric(point_maxima$year) < 2002, ]
+point_maxima <- filter(point_maxima, name != "unnamed")
+point_maxima <- na.omit(point_maxima)
+head(point_maxima, 10)
 
 # add the same index to the point maxima data:
 point_maxima <- point_maxima %>% 
   group_by(name, year) %>% 
   mutate(lf_idx = row_number())
 
-joined <- left_join(hurdat, select(point_maxima, name, year, lf_idx, amount, location),
+
+# get all data, and add an index to join on
+h_data <- read.csv("data/AllData.csv", stringsAsFactors = FALSE)
+h_data$X <- NULL
+cols_out <- names(h_data)
+
+h_data <- h_data %>% 
+  mutate(datetime = ymd(Time),
+         name_lower = str_to_lower(Name)) %>% 
+  mutate(year = year(datetime)) %>% 
+  arrange(name_lower) %>% 
+  group_by(name_lower) %>% 
+  mutate(lf_idx = row_number()) %>%
+  ungroup() %>% 
+  filter(year <= 2002)
+
+joined <- left_join(h_data, select(point_maxima, name, year, lf_idx, amount, location),
                     by = c("name_lower" = "name", "year" = "year", "lf_idx" = "lf_idx")) %>% 
-  arrange(datetime,lf_idx)
+  arrange(datetime, lf_idx)
 
-joined$year <- NULL
-joined$X <- NULL
-joined$name_lower <- NULL
+joined$point_max_mm <- joined$amount * 25.4
+joined$Rainfall <- ifelse(is.na(joined$Rainfall) & !is.na(joined$point_max_mm), 
+                          joined$point_max_mm,
+                          joined$Rainfall)
 
-names(joined)[names(joined) == "amount"] <- "point_max"
-head(joined)
-joined$point_max_mml <- joined$point_max * 25.4
-
-write.csv(joined, "data/hurdat2/hurdat2_landfall_with_point_maxima.csv")
+joined <- select(joined, cols_out)
+write.csv(joined, "data/AllData2.csv")
