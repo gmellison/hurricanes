@@ -62,8 +62,7 @@ h_data <- h_data %>%
   arrange(name_lower) %>% 
   group_by(name_lower) %>% 
   mutate(lf_idx = row_number()) %>%
-  ungroup() %>% 
-  filter(year <= 2002)
+  ungroup()
 
 joined <- left_join(h_data, select(point_maxima, name, year, lf_idx, amount, location),
                     by = c("name_lower" = "name", "year" = "year", "lf_idx" = "lf_idx")) %>% 
