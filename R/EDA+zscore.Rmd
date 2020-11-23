@@ -1,0 +1,117 @@
+---
+title: "EDA + z-scores"
+author: "STAT8920 2020FALL"
+date: "11/22/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(maps)
+library(maptools)
+
+storm_data <- read.csv("AllData.csv", stringsAsFactors = FALSE)
+summary(storm_data)
+head(storm_data)
+
+```
+
+```{r}
+wm <- borders("world", colour="gray50", fill="white")
+sm <- ggplot() + wm
+sm <- sm +  geom_point(data=storm_data, aes(x=Longitude, y=Latitude), color="red", alpha=0.5)
+#ggsave("../plots/eda/storm_map.png", sm, scale=0.5)
+print(sm)
+```
+
+```{r}
+# pressure, wind, rainfall, surge by year:
+rain_series <- ggplot(storm_data) + 
+  geom_point(aes(x=mdy(Time), y=Rainfall))
+#ggsave("../plots/eda/rain_by_year.png", rain_series, scale=0.5) 
+print(rain_series)
+ 
+wind_series <- ggplot(storm_data) + 
+  geom_point(aes(x=mdy(Time), y=MaxWindSpeed))
+#ggsave("../plots/eda/wind_by_year.png", wind_series, scale=0.5) 
+print(wind_series)
+
+pressure_series <- ggplot(storm_data) + 
+  geom_point(aes(x=mdy(Time), y=CentPressure)) 
+#ggsave("../plots/eda/pressure_by_year.png", pressure_series, scale=0.5) 
+print(pressure_series)
+
+surge_series <- ggplot(storm_data) + 
+  geom_point(aes(x=mdy(Time), y=Surge))
+#ggsave("../plots/eda/surge_by_year.png", surge_series, scale=0.5) 
+print(surge_series)
+
+```
+
+
+```{r, echo=FALSE}
+ 
+####
+#### couple scatter plots
+####
+# windspeeed vs. pressure
+pres_vs_windspeed <- ggplot(storm_data,
+       aes(x=CentPressure,
+           y = MaxWindSpeed)) + 
+  geom_point()
+print(pres_vs_windspeed)
+#ggsave("../plots/eda/wind_vs_pressure.png", pres_vs_windspeed, scale=0.5)
+
+# rain vs. pressure
+rain_vs_pres <- ggplot(storm_data,
+       aes(x=CentPressure,
+           y = Rainfall)) + 
+  geom_point()
+print(rain_vs_pres)
+#ggsave("../plots/eda/rain_vs_pressure.png", rain_vs_pres, scale=0.5)
+
+# surge vs. rainfall
+surge_vs_rain <- ggplot(storm_data,
+       aes(x = Rainfall,
+           y = Surge)) + 
+  geom_point()
+print(surge_vs_rain)
+#ggsave("../plots/eda/rain_vs_surge.png", surge_vs_rain, scale=0.5)
+
+# surge vs. pressure
+surge_vs_pres <- ggplot(storm_data,
+       aes(x = CentPressure,
+           y = Surge)) + 
+  geom_point()
+print(surge_vs_pres)
+#ggsave("../plots/eda/pressure_vs_surge.png", surge_vs_pres,  scale=0.5)
+```
+
+## z-scores on MaxWindSpeed, CentPressure, Rainfall, and Surge
+```{r }
+scale2 <- function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+storm_data_zscore = storm_data %>%
+  as_tibble %>%
+    mutate_at(c("MaxWindSpeed", "CentPressure", "Rainfall", "Surge"), scale2)
+
+ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = MaxWindSpeed)) 
+ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = CentPressure)) 
+ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = Rainfall)) 
+ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = Surge)) 
+
+# MaxWindSpeed > 2 sigma
+print(na.omit(storm_data[,c("Name","Time","MaxWindSpeed")][storm_data_zscore$MaxWindSpeed > 2,]))
+# CentPressure < -2 sigma
+print(na.omit(storm_data[,c("Name","Time","CentPressure")][storm_data_zscore$CentPressure < -2,]))
+# Rainfall > 2 sigma
+print(na.omit(storm_data[,c("Name","Time","Rainfall")][storm_data_zscore$Rainfall > 2,]))
+# Surge > 2 sigma
+print(na.omit(storm_data[,c("Name","Time","Surge")][storm_data_zscore$Surge > 2,]))
+```
