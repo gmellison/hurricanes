@@ -1,0 +1,5 @@
+T	NOAA NCEP CPC CMORPH 3-hourly mean morphed cmorph
+days since 2002-12-07 00:00:00	mm/hr
+forrtl: severe (174): SIGSEGV, segmentation fault occurred
+Image              PC        Routine            Line        Source             
+ingridd            08159B8C  Unknown               Unknown  Unknown
