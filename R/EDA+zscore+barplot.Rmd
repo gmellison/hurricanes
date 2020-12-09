@@ -1,15 +1,16 @@
 ---
-title: "EDA + z-scores"
+title: "EDA + z-scores + barplot"
 author: "STAT8920 2020FALL"
-date: "11/22/2020"
+date: "12/09/2020"
 output:
   html_document:
     df_print: paged
 ---
 
 ```{r setup}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, echo = TRUE)
 
+library(gridExtra)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
@@ -17,7 +18,7 @@ library(lubridate)
 library(maps)
 library(maptools)
 
-storm_data <- read.csv("AllData.csv", stringsAsFactors = FALSE)
+storm_data <- read.csv("AllData2.csv", stringsAsFactors = FALSE)
 summary(storm_data)
 head(storm_data)
 
@@ -94,12 +95,13 @@ print(surge_vs_pres)
 #ggsave("../plots/eda/pressure_vs_surge.png", surge_vs_pres,  scale=0.5)
 ```
 
-## z-scores on MaxWindSpeed, CentPressure, Rainfall, and Surge
+### z-scores on MaxWindSpeed, CentPressure, Rainfall, and Surge
 ```{r }
 scale2 <- function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
 storm_data_zscore = storm_data %>%
   as_tibble %>%
     mutate_at(c("MaxWindSpeed", "CentPressure", "Rainfall", "Surge"), scale2)
+storm_data_zscore['CentPressure'] = -storm_data_zscore['CentPressure'] # The lower pressure is, the stronger a storm is.
 
 ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = MaxWindSpeed)) 
 ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = CentPressure)) 
@@ -108,10 +110,46 @@ ggplot(storm_data_zscore) + geom_point(aes(x = mdy(Time), y = Surge))
 
 # MaxWindSpeed > 2 sigma
 print(na.omit(storm_data[,c("Name","Time","MaxWindSpeed")][storm_data_zscore$MaxWindSpeed > 2,]))
-# CentPressure < -2 sigma
-print(na.omit(storm_data[,c("Name","Time","CentPressure")][storm_data_zscore$CentPressure < -2,]))
+# CentPressure > 2 sigma
+print(na.omit(storm_data[,c("Name","Time","CentPressure")][storm_data_zscore$CentPressure > 2,]))
 # Rainfall > 2 sigma
 print(na.omit(storm_data[,c("Name","Time","Rainfall")][storm_data_zscore$Rainfall > 2,]))
 # Surge > 2 sigma
 print(na.omit(storm_data[,c("Name","Time","Surge")][storm_data_zscore$Surge > 2,]))
+
+
 ```
+
+### Visualization; barplot
+```{r }
+storm_data_zscore = as.data.frame(storm_data_zscore)
+
+data1 = data.frame( factors = colnames(storm_data_zscore)[5:8], 
+                   z_score = as.numeric(storm_data_zscore[storm_data_zscore[,1] == "ANDREW",][1,5:8]))
+ggplot(data1, aes(x=factors, y=z_score, fill = z_score )) + 
+  geom_bar(stat = "identity") +
+  scale_fill_gradient2(low="#1ca344", mid="#f3f705", high='#d61313') +
+  ggtitle(paste("ANDREW",storm_data_zscore[storm_data_zscore[,1] == "ANDREW",][1,2])) +
+  labs(fill = "Alert Level")
+
+
+data2 = data.frame( factors = colnames(storm_data_zscore)[5:8], 
+                    z_score = as.numeric(storm_data_zscore[storm_data_zscore[,1] == "KATRINA",][3,5:8]))
+ggplot(data2, aes(x=factors, y=z_score, fill = z_score )) + 
+  geom_bar(stat = "identity") +
+  scale_fill_gradient2(low="#1ca344", mid="#f3f705", high='#d61313') +
+  ggtitle(paste("KATRINA",storm_data_zscore[storm_data_zscore[,1] == "KATRINA",][3,2])) +
+  labs(fill = "Alert Level")
+
+
+data3 = data.frame( factors = colnames(storm_data_zscore)[5:8], 
+                    z_score = as.numeric(storm_data_zscore[storm_data_zscore[,1] == "HELENE",][2,5:8]))
+ggplot(data3, aes(x=factors, y=z_score, fill = z_score )) + 
+  geom_bar(stat = "identity") +
+  scale_fill_gradient2(low="#1ca344", mid="#f3f705", high='#d61313') +
+  ggtitle(paste("HELENE",storm_data_zscore[storm_data_zscore[,1] == "HELENE",][2,2])) +
+  labs(fill = "Alert Level")
+
+```
+
+
